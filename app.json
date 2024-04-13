@@ -1,30 +1,50 @@
 {
   "expo": {
-    "name": "solarbloom",
+    "name": "Solar Bloom",
     "slug": "solarbloom",
+    "description": "Lune & Balkon PFA",
     "version": "1.0.0",
     "orientation": "portrait",
+    "scheme": "com.solarbloomtn.com",
     "icon": "./assets/icon.png",
+    "jsEngine": "hermes",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.solarbloomtn.com",
+      "icon": "./assets/icon.png",
+      "buildNumber": "1"
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+      "package": "com.solarbloomtn.com",
+      "versionCode": 1,
+      "softwareKeyboardLayoutMode": "pan",
+      "icon": "./assets/icon.png",
+      "permissions": []
+    },
+    "androidStatusBar": {
+      "barStyle": "light-content",
+      "backgroundColor": "#0d9488"
+    },
+    "androidNavigationBar": {
+      "barStyle": "light-content",
+      "backgroundColor": "#0d9488"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
-    }
+      "favicon": "./assets/favicon.png",
+      "title": "SolarBloom"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "ef946bb7-5e94-479f-974d-f08b4b393195"
+      }
+    },
+    "owner": "solarbloom"
   }
 }
