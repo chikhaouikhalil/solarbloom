@@ -15,8 +15,8 @@ import axios from "axios";
 //import { setUserData } from "../redux/Actions";
 
 const SignIn = ({ navigation }) => {
-  const [email, setEmail] = useState("Linachebbi88@gmail.com");
-  const [password, setPassword] = useState("12345678");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loader, setLoader] = useState(false);
 
@@ -81,7 +81,7 @@ const SignIn = ({ navigation }) => {
 
   return (
     <View px="3" bg="white" style={styles.container}>
-      <VStack my="2">
+      <VStack mb="2" mt="6">
         <Animatable.View
           animation="fadeInUp"
           easing="linear"

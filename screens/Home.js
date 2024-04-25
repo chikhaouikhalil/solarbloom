@@ -1,4 +1,12 @@
-import { HStack, Pressable, ScrollView, Text, VStack, View } from "native-base";
+import {
+  Divider,
+  HStack,
+  Pressable,
+  ScrollView,
+  Text,
+  VStack,
+  View,
+} from "native-base";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -15,13 +23,18 @@ import { setPlantsData, setUserData } from "../redux/Actions";
 import axios from "axios";
 import { SERVER } from "../firebase";
 import * as Device from "expo-device";
-import ScreenLoader from "../components/elements/ScreenLoader";
 import { width } from "../utils/GlobalStyle";
-import { MaterialCommunityIcons, AntDesign } from "@expo/vector-icons";
+import {
+  MaterialCommunityIcons,
+  AntDesign,
+  Ionicons,
+} from "@expo/vector-icons";
 import { ActionSheetComponent } from "../components/elements/ActionSheet";
 import PlantItem from "../components/PlantItem";
 import DeletePlant from "../components/DeletePlant";
 import NetInfo from "@react-native-community/netinfo";
+import LineChartComponent from "../components/LineChart";
+import moment from "moment";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -91,6 +104,7 @@ const Home = ({ navigation }) => {
   const [showPlantsList, setShowPlantsList] = useState(false);
   const [showDeletePlant, setShowDeletePlant] = useState(false);
   const [plantToDelete, setPlantToDelete] = useState(null);
+
   const getUserData = async () => {
     NetInfo.fetch().then(async (state) => {
       if (state.isConnected) {
@@ -185,7 +199,7 @@ const Home = ({ navigation }) => {
             {userData.garden?.length == 0 ? (
               <VStack
                 mt="3"
-                borderStyle="solid"
+                borderStyle="dashed"
                 borderWidth="1"
                 borderColor="muted.500"
                 w="full"
@@ -287,6 +301,113 @@ const Home = ({ navigation }) => {
                 </VStack>
               </HStack>
             )}
+            {/* soil condition */}
+            {userData.soil && (
+              <VStack>
+                <Divider mt="4" />
+                <VStack
+                  flex={1}
+                  bg={userData.soil == "dry" ? "red.100" : "teal.100"}
+                  mt="4"
+                  p="3"
+                  borderRadius="md"
+                >
+                  <HStack flex={1} borderColor="red.400">
+                    <Image
+                      source={require("../assets/watering.png")}
+                      style={{ width: 88.4, height: 129 }}
+                    />
+                    <VStack mx="2" style={{ width: 2 }} bg="black"></VStack>
+                    <VStack justifyContent="center" flex={1} mr="2">
+                      <Text fontSize="md" fontFamily="Bold">
+                        Soil State
+                      </Text>
+                      <Text fontSize="xs" mb="2" fontFamily="Medium">
+                        Last Check :{" "}
+                        {moment(userData.soilCheckedAt).format("LLL")}
+                      </Text>
+                      <Text fontSize="md" fontFamily="Medium">
+                        {userData.soil == "dry"
+                          ? "The soil appears dry!"
+                          : "The soil is moist."}
+                      </Text>
+                      <Text fontFamily="Regular">
+                        {userData.soil == "dry"
+                          ? "Please water accordingly."
+                          : "Monitor carefully to prevent overwatering."}
+                      </Text>
+                    </VStack>
+                  </HStack>
+                </VStack>
+              </VStack>
+            )}
+
+            {/* temp chart */}
+            <Divider mt="4" />
+            {userData.temperature_records.length < 8 ? (
+              <VStack>
+                <Text
+                  color="warmGray.800"
+                  fontSize="lg"
+                  mt="4"
+                  mb="2"
+                  fontFamily="SemiBold"
+                >
+                  Temperature Records
+                </Text>
+                <VStack bg="teal.500" p="3" borderRadius="md">
+                  <Ionicons
+                    name="stats-chart"
+                    size={60}
+                    color="white"
+                    style={{ alignSelf: "center", marginVertical: 15 }}
+                  />
+
+                  <Text color="white" textAlign="center">
+                    Connect your sensor to begin recording temperature. Once
+                    connected, you'll be able to track and monitor temperature
+                    changes.
+                  </Text>
+                </VStack>
+              </VStack>
+            ) : (
+              <VStack>
+                <Text
+                  color="warmGray.800"
+                  fontSize="lg"
+                  mt="4"
+                  fontFamily="SemiBold"
+                >
+                  Temperature Records
+                </Text>
+                <Text fontWeight="black" color="teal.600" fontSize="xl">
+                  {
+                    userData.temperature_records[
+                      userData.temperature_records.length - 1
+                    ].value
+                  }
+                  ℃
+                </Text>
+                <Text fontSize="xs">
+                  Last Check on{" "}
+                  {moment(
+                    userData.temperature_records[
+                      userData.temperature_records.length - 1
+                    ].date
+                  )
+                    .format("LLL")
+                    .toLowerCase()}
+                </Text>
+                <LineChartComponent
+                  data={userData.temperature_records.slice(-8)}
+                  min={0}
+                  max={60}
+                  sybmol={"°C"}
+                  strokeColor="#14b8a6"
+                />
+              </VStack>
+            )}
+
             {/* tip of the day */}
             <Text
               color="warmGray.800"
@@ -302,6 +423,71 @@ const Home = ({ navigation }) => {
               care they need to flourish. With dedication and a little bit of
               love, your garden will thrive.
             </Text>
+            <Divider mt="4" />
+            {/* humidity chart */}
+            {userData.humidity_records.length < 8 ? (
+              <VStack mb="5">
+                <Text
+                  color="warmGray.800"
+                  fontSize="lg"
+                  mt="4"
+                  mb="2"
+                  fontFamily="SemiBold"
+                >
+                  Humidity Records
+                </Text>
+                <VStack bg="teal.500" p="3" borderRadius="md">
+                  <Ionicons
+                    name="stats-chart"
+                    size={60}
+                    color="white"
+                    style={{ alignSelf: "center", marginVertical: 15 }}
+                  />
+
+                  <Text color="white" textAlign="center">
+                    Connect your sensor to begin recording humidity level. Once
+                    connected, you'll be able to track and monitor humidity
+                    changes.
+                  </Text>
+                </VStack>
+              </VStack>
+            ) : (
+              <VStack>
+                <Text
+                  color="warmGray.800"
+                  fontSize="lg"
+                  mt="5"
+                  fontFamily="SemiBold"
+                >
+                  Humidity Records
+                </Text>
+                <Text fontWeight="black" color="#0369a1" fontSize="xl">
+                  {
+                    userData.humidity_records[
+                      userData.humidity_records.length - 1
+                    ].value
+                  }
+                  %
+                </Text>
+                <Text fontSize="xs">
+                  Last Check on{" "}
+                  {moment(
+                    userData.humidity_records[
+                      userData.humidity_records.length - 1
+                    ].date
+                  )
+                    .format("LLL")
+                    .toLowerCase()}
+                </Text>
+                <LineChartComponent
+                  data={userData.humidity_records.slice(-8)}
+                  min={0}
+                  max={100}
+                  sybmol="%"
+                  strokeColor="#0369a1"
+                />
+              </VStack>
+            )}
           </VStack>
           {/*  this is where we choose a plant to add to the garden */}
           <ActionSheetComponent

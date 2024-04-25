@@ -6,7 +6,11 @@ import moment from "moment";
 import { MaterialIcons } from "@expo/vector-icons";
 import { ActionSheetComponent } from "../components/elements/ActionSheet";
 import ModeItem from "../components/ModeItem";
-import SectionCharts from "../components/SectionCharts";
+
+import PlantFAQ from "../components/PlantFAQ";
+import { width } from "../utils/GlobalStyle";
+import { ProgressCircle } from "react-native-svg-charts";
+import PlantGrowth from "../components/PlantGrowth";
 
 const Section = ({ navigation, route }) => {
   const sectionData = route.params;
@@ -48,7 +52,7 @@ const Section = ({ navigation, route }) => {
       <BackHeader title="Garden section" />
       <ScrollView showsVerticalScrollIndicator={false}>
         {/** general plant bar */}
-        <HStack bg="gray.100">
+        <HStack bg="transparent">
           <Image
             style={{ width: 100, height: 100 }}
             source={{ uri: plantData.image }}
@@ -63,55 +67,6 @@ const Section = ({ navigation, route }) => {
             </Text>
           </VStack>
         </HStack>
-        {/* temperature and humidity */}
-        <HStack>
-          {/* temp */}
-          <HStack
-            p="2"
-            alignItems="center"
-            flex={1}
-            borderBottomWidth="1"
-            borderColor="muted.200"
-          >
-            <VStack>
-              <Image
-                style={{ width: 80, height: 80 }}
-                source={require("../assets/temp.png")}
-              />
-            </VStack>
-            <VStack flex={1}>
-              <Text color="red.600" fontFamily="Black">
-                Temperature
-              </Text>
-              <Text color="warmGray.600" fontSize="sm" fontFamily="Medium">
-                60 ℃
-              </Text>
-            </VStack>
-          </HStack>
-          {/* humidity */}
-          <HStack
-            p="2"
-            alignItems="center"
-            flex={1}
-            borderBottomWidth="1"
-            borderColor="muted.200"
-          >
-            <VStack>
-              <Image
-                style={{ width: 80, height: 80 }}
-                source={require("../assets/humidity.png")}
-              />
-            </VStack>
-            <VStack flex={1}>
-              <Text color="#26aad9" fontFamily="Black">
-                Humidity
-              </Text>
-              <Text color="warmGray.600" fontSize="sm" fontFamily="Medium">
-                80 %
-              </Text>
-            </VStack>
-          </HStack>
-        </HStack>
         {/* choose mode */}
         <Pressable
           onPress={() => setShowModesList(true)}
@@ -119,7 +74,12 @@ const Section = ({ navigation, route }) => {
           py="2"
           px="3"
         >
-          <HStack alignItems="center" justifyContent="space-between">
+          <HStack
+            alignItems="center"
+            justifyContent="space-between"
+            mt="2"
+            mb="1.5"
+          >
             <VStack flex={1}>
               <Text>
                 <Text color="teal.600" fontFamily="Medium">
@@ -139,8 +99,421 @@ const Section = ({ navigation, route }) => {
             {currentMode.description}
           </Text>
         </Pressable>
-        {/* Charts section */}
-        <SectionCharts />
+        {/** name & description */}
+        <VStack px="3" mt="3">
+          <Text
+            color="teal.600"
+            fontFamily="Black"
+            fontSize="2xl"
+            textAlign="center"
+          >
+            {plantData.name}
+          </Text>
+          <Text
+            color="teal.900"
+            fontFamily="Light"
+            fontSize="md"
+            textAlign="center"
+          >
+            {plantData.species}
+          </Text>
+          <Text color="warmGray.600" fontSize="sm" mt="4" textAlign="justify">
+            {plantData.description}
+          </Text>
+          {/* cards */}
+          <Text color="warmGray.600" fontSize="lg" my="3" fontFamily="SemiBold">
+            Quick Info
+          </Text>
+          <VStack>
+            <HStack
+              alignItems="stretch"
+              justifyContent="space-between"
+              flexWrap="wrap"
+            >
+              {/* sun */}
+              <VStack
+                borderWidth="1"
+                borderColor="muted.400"
+                borderRadius="md"
+                w={width * 0.3}
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Image
+                  style={{ width: width * 0.15, height: width * 0.15 }}
+                  source={require("../assets/sun.png")}
+                />
+                <Text textAlign="center" color="warmGray.900">
+                  Sun
+                </Text>
+                <Text textAlign="center" mb="2" color="teal.900" fontSize="xs">
+                  {plantData.sun}
+                </Text>
+              </VStack>
+              {/* water */}
+              <VStack
+                borderWidth="1"
+                borderColor="muted.400"
+                borderRadius="md"
+                w={width * 0.3}
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Image
+                  style={{ width: width * 0.15, height: width * 0.15 }}
+                  source={require("../assets/water.png")}
+                />
+                <Text textAlign="center" color="warmGray.900">
+                  Water
+                </Text>
+                <Text
+                  textAlign="center"
+                  mb="2"
+                  color="teal.900"
+                  fontSize="xs"
+                >{`${plantData.watering.min}-${plantData.watering.max} ${plantData.watering.unit}`}</Text>
+              </VStack>
+              {/* depth */}
+              <VStack
+                borderWidth="1"
+                borderColor="muted.400"
+                borderRadius="md"
+                w={width * 0.3}
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Image
+                  style={{ width: width * 0.15, height: width * 0.15 }}
+                  source={require("../assets/depth.png")}
+                />
+                <Text textAlign="center" color="warmGray.900">
+                  Depth
+                </Text>
+                <Text
+                  textAlign="center"
+                  mb="2"
+                  color="teal.900"
+                  fontSize="xs"
+                >{`${plantData.planting.depth.min}-${plantData.planting.depth.max} ${plantData.planting.depth.unit}`}</Text>
+              </VStack>
+              {/* spacing */}
+              <VStack
+                borderWidth="1"
+                borderColor="muted.400"
+                borderRadius="md"
+                mt="2"
+                w={width * 0.3}
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Image
+                  style={{ width: width * 0.15, height: width * 0.15 }}
+                  source={require("../assets/spacing.png")}
+                />
+                <Text textAlign="center" color="warmGray.900">
+                  Spacing
+                </Text>
+                <Text
+                  textAlign="center"
+                  mb="2"
+                  color="teal.900"
+                  fontSize="xs"
+                >{`${plantData.planting.spacing.min}-${plantData.planting.spacing.max} ${plantData.planting.spacing.unit}`}</Text>
+              </VStack>
+              {/* harvest */}
+              <VStack
+                borderWidth="1"
+                borderColor="muted.400"
+                borderRadius="md"
+                mt="2"
+                w={width * 0.3}
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Image
+                  style={{ width: width * 0.15, height: width * 0.15 }}
+                  source={require("../assets/harvest1.png")}
+                />
+                <Text textAlign="center" color="warmGray.900">
+                  Harvest
+                </Text>
+                <Text
+                  textAlign="center"
+                  mb="2"
+                  color="teal.900"
+                  fontSize="xs"
+                >{`${plantData.harvest.duration.min}-${plantData.harvest.duration.max} ${plantData.harvest.duration.unit}`}</Text>
+              </VStack>
+              {/* temperature */}
+              <VStack
+                borderWidth="1"
+                borderColor="muted.400"
+                borderRadius="md"
+                mt="2"
+                w={width * 0.3}
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Image
+                  style={{ width: width * 0.15, height: width * 0.15 }}
+                  source={require("../assets/temp.png")}
+                />
+                <Text textAlign="center" color="warmGray.900">
+                  Temperature
+                </Text>
+                <Text
+                  textAlign="center"
+                  mb="2"
+                  color="teal.900"
+                  fontSize="xs"
+                >{`${plantData.temperature.min}-${plantData.temperature.max} ${plantData.temperature.unit}`}</Text>
+              </VStack>
+              {/* sun */}
+              <VStack
+                mt="2"
+                borderWidth="1"
+                borderColor="muted.400"
+                borderRadius="md"
+                w={width * 0.3}
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Image
+                  style={{ width: width * 0.15, height: width * 0.15 }}
+                  source={require("../assets/soil.png")}
+                />
+                <Text textAlign="center" color="warmGray.900">
+                  Soil Impact
+                </Text>
+                <Text textAlign="center" mb="2" color="teal.900" fontSize="xs">
+                  {plantData.soilImpact}
+                </Text>
+              </VStack>
+              {/* Yield */}
+              <VStack
+                borderWidth="1"
+                borderColor="muted.400"
+                borderRadius="md"
+                mt="2"
+                w={width * 0.3}
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Image
+                  style={{ width: width * 0.15, height: width * 0.15 }}
+                  source={require("../assets/yield.png")}
+                />
+                <Text textAlign="center" color="warmGray.900">
+                  Yield
+                </Text>
+                <Text
+                  textAlign="center"
+                  mb="2"
+                  color="teal.900"
+                  fontSize="xs"
+                >{`${plantData.yield.value} ${plantData.yield.unit}`}</Text>
+              </VStack>
+              <VStack
+                mt="2"
+                borderWidth="1"
+                borderColor="transparent"
+                borderRadius="md"
+                w={width * 0.3}
+                alignItems="center"
+                justifyContent="center"
+              ></VStack>
+            </HStack>
+          </VStack>
+          {/* Germination */}
+          <Text color="warmGray.600" fontSize="lg" mt="5" fontFamily="SemiBold">
+            Germination
+          </Text>
+
+          <Text color="warmGray.600" fontSize="sm" mt="2" textAlign="justify">
+            {plantData.germination.description}
+          </Text>
+          {/* rate germination */}
+          <VStack alignSelf="center" mt="4">
+            <VStack style={{ width: 80, height: 80, alignSelf: "center" }}>
+              <VStack>
+                <ProgressCircle
+                  style={{ height: 80 }}
+                  progress={plantData.germination.rate}
+                  progressColor="#14b8a6"
+                  startAngle={-Math.PI * 0.95}
+                  endAngle={Math.PI * 0.95}
+                  strokeWidth={6}
+                />
+              </VStack>
+              <VStack
+                style={{
+                  width: 80,
+                  height: 80,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+                position="absolute"
+              >
+                <Text color="teal.500" fontFamily="Bold" fontSize="md">
+                  {plantData.germination.rate * 100}%
+                </Text>
+              </VStack>
+            </VStack>
+            <Text color="teal.600" mt="1">
+              Germination Success Rate
+            </Text>
+          </VStack>
+          {/* neighbours */}
+          <VStack>
+            <Text
+              color="warmGray.600"
+              fontSize="lg"
+              mt="2"
+              mb="3"
+              fontFamily="SemiBold"
+            >
+              Neighbours
+            </Text>
+            <HStack justifyContent="space-between">
+              {/* companion plants */}
+              <VStack w="1/2" bg="#ccfbf180" px="2" py="4">
+                <HStack alignItems="center" justifyContent="center" mb="2">
+                  <Image
+                    source={require("../assets/good.png")}
+                    style={{ width: 30, height: 30 }}
+                  />
+                  <Text
+                    ml="2"
+                    color="warmGray.600"
+                    fontSize="md"
+                    fontFamily="Medium"
+                  >
+                    Companion
+                  </Text>
+                </HStack>
+                <VStack style={{ alignItems: "center" }}>
+                  {plantData.companion.map((el) => (
+                    <Text color="warmGray.600" key={el}>
+                      ◉ {el}
+                    </Text>
+                  ))}
+                </VStack>
+              </VStack>
+              {/* combative plants */}
+              <VStack w="1/2" bg="#fee2e280" px="2" py="4">
+                <HStack alignItems="center" justifyContent="center" mb="2">
+                  <Image
+                    source={require("../assets/bad.png")}
+                    style={{ width: 30, height: 30 }}
+                  />
+                  <Text
+                    ml="2"
+                    color="warmGray.600"
+                    fontSize="md"
+                    fontFamily="Medium"
+                  >
+                    Combative
+                  </Text>
+                </HStack>
+                <VStack style={{ alignItems: "center" }}>
+                  {plantData.combative.map((el) => (
+                    <Text color="warmGray.600" key={el}>
+                      ◉ {el}
+                    </Text>
+                  ))}
+                </VStack>
+              </VStack>
+            </HStack>
+          </VStack>
+          {/* Growth */}
+          <VStack>
+            <Text
+              color="warmGray.600"
+              fontSize="lg"
+              mt="4"
+              fontFamily="SemiBold"
+            >
+              Length of Plant (in inches) per {plantData.growth.unit}
+            </Text>
+            <Text color="teal.600"></Text>
+            <PlantGrowth data={plantData.growth.data} />
+          </VStack>
+          {/* Pests and diseases */}
+          <VStack>
+            <Text
+              color="warmGray.600"
+              fontSize="lg"
+              mt="2"
+              mb="3"
+              fontFamily="SemiBold"
+            >
+              Pests and Diceases
+            </Text>
+            <HStack justifyContent="space-between">
+              {/* pests  */}
+              <VStack w="1/2" bg="muted.50" px="2" py="4">
+                <HStack alignItems="center" justifyContent="center" mb="2">
+                  <Image
+                    source={require("../assets/pest.png")}
+                    style={{ width: 30, height: 30 }}
+                  />
+                  <Text
+                    ml="2"
+                    color="warmGray.600"
+                    fontSize="md"
+                    fontFamily="Medium"
+                  >
+                    Pests
+                  </Text>
+                </HStack>
+                <VStack style={{ alignItems: "center" }}>
+                  {plantData.pests.map((el) => (
+                    <Text color="warmGray.600" key={el}>
+                      ◉ {el}
+                    </Text>
+                  ))}
+                </VStack>
+              </VStack>
+              {/* diseases */}
+              <VStack w="1/2" bg="muted.100" px="2" py="4">
+                <HStack alignItems="center" justifyContent="center" mb="2">
+                  <Image
+                    source={require("../assets/disease.png")}
+                    style={{ width: 30, height: 30 }}
+                  />
+                  <Text
+                    ml="2"
+                    color="warmGray.600"
+                    fontSize="md"
+                    fontFamily="Medium"
+                  >
+                    Diseases
+                  </Text>
+                </HStack>
+                <VStack style={{ alignItems: "center" }}>
+                  {plantData.diseases.map((el) => (
+                    <Text color="warmGray.600" key={el}>
+                      ◉ {el}
+                    </Text>
+                  ))}
+                </VStack>
+              </VStack>
+            </HStack>
+          </VStack>
+
+          {/* faq */}
+          <VStack my="5">
+            <Text
+              color="warmGray.600"
+              fontSize="lg"
+              mb="4"
+              fontFamily="SemiBold"
+            >
+              Frequently asked question (FAQ)
+            </Text>
+            <PlantFAQ faq={plantData.faq} />
+          </VStack>
+        </VStack>
       </ScrollView>
       {/*  this is where we choose a plant to add to the garden */}
       <ActionSheetComponent

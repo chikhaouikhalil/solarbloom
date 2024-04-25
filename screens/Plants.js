@@ -146,9 +146,8 @@ export default function Plants({ navigation }) {
                           {/** image */}
                           <Image
                             source={{ uri: plant.image }}
-                            style={{ width: 100, height: 100 }}
+                            style={{ width: 80, height: 80, marginRight: 10 }}
                             bg="warmGray.200"
-                            mr="3"
                           />
                           {/** name + description */}
                           <VStack style={{ flex: 1 }}>

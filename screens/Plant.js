@@ -13,7 +13,14 @@ const Plant = ({ navigation, route }) => {
     <View flex={1}>
       <BackHeader title={plant.name} />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Image style={{ width, height: width }} source={{ uri: plant.image }} />
+        <Image
+          style={{
+            width: width * 0.7,
+            height: width * 0.7,
+            alignSelf: "center",
+          }}
+          source={{ uri: plant.image }}
+        />
         {/** name & description */}
         <VStack px="3">
           <Text
@@ -36,7 +43,7 @@ const Plant = ({ navigation, route }) => {
             {plant.description}
           </Text>
           {/* cards */}
-          <Text color="warmGray.600" fontSize="lg" mb="3" fontFamily="SemiBold">
+          <Text color="warmGray.600" fontSize="lg" my="3" fontFamily="SemiBold">
             Quick Info
           </Text>
           <VStack>
@@ -86,7 +93,7 @@ const Plant = ({ navigation, route }) => {
                   mb="2"
                   color="teal.900"
                   fontSize="xs"
-                >{`${plant.watering.min}-${plant.watering.max} ${plant.watering.unit}`}</Text>
+                >{`${plant.watering.min}→${plant.watering.max} ${plant.watering.unit}`}</Text>
               </VStack>
               {/* depth */}
               <VStack
@@ -109,7 +116,7 @@ const Plant = ({ navigation, route }) => {
                   mb="2"
                   color="teal.900"
                   fontSize="xs"
-                >{`${plant.planting.depth.min}-${plant.planting.depth.max} ${plant.planting.depth.unit}`}</Text>
+                >{`${plant.planting.depth.min}→${plant.planting.depth.max} ${plant.planting.depth.unit}`}</Text>
               </VStack>
               {/* spacing */}
               <VStack
@@ -133,7 +140,7 @@ const Plant = ({ navigation, route }) => {
                   mb="2"
                   color="teal.900"
                   fontSize="xs"
-                >{`${plant.planting.spacing.min}-${plant.planting.spacing.max} ${plant.planting.spacing.unit}`}</Text>
+                >{`${plant.planting.spacing.min}→${plant.planting.spacing.max} ${plant.planting.spacing.unit}`}</Text>
               </VStack>
               {/* harvest */}
               <VStack
@@ -157,7 +164,7 @@ const Plant = ({ navigation, route }) => {
                   mb="2"
                   color="teal.900"
                   fontSize="xs"
-                >{`${plant.harvest.duration.min}-${plant.harvest.duration.max} ${plant.harvest.duration.unit}`}</Text>
+                >{`${plant.harvest.duration.min}→${plant.harvest.duration.max} ${plant.harvest.duration.unit}`}</Text>
               </VStack>
               {/* temperature */}
               <VStack
@@ -181,7 +188,31 @@ const Plant = ({ navigation, route }) => {
                   mb="2"
                   color="teal.900"
                   fontSize="xs"
-                >{`${plant.temperature.min}-${plant.temperature.max} ${plant.temperature.unit}`}</Text>
+                >{`${plant.temperature.min}→${plant.temperature.max} ${plant.temperature.unit}`}</Text>
+              </VStack>
+              {/* humidity */}
+              <VStack
+                borderWidth="1"
+                borderColor="muted.400"
+                borderRadius="md"
+                mt="2"
+                w={width * 0.3}
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Image
+                  style={{ width: width * 0.15, height: width * 0.15 }}
+                  source={require("../assets/humidity.png")}
+                />
+                <Text textAlign="center" color="warmGray.900">
+                  Humidity
+                </Text>
+                <Text
+                  textAlign="center"
+                  mb="2"
+                  color="teal.900"
+                  fontSize="xs"
+                >{`${plant.humidity.min}→${plant.humidity.max} ${plant.humidity.unit}`}</Text>
               </VStack>
               {/* sun */}
               <VStack
